@@ -27,9 +27,8 @@ impl psat::Target for SomeTarget {
 
 struct SomeNode {}
 
-impl psat::Component<SomeTarget> for SomeNode {
+impl psat::NativeComponent<SomeTarget> for SomeNode {
     type Props = &'static str;
-    type State = ();
     fn reconcile(&self,
                  _: &<SomeTarget as psat::Target>::Context,
                  component: &mut SomeComponent,

@@ -10,19 +10,21 @@ pub trait Target {
     fn get_root_and_context(&mut self) -> (&mut Self::Component, &Self::Context);
 }
 
-pub trait Component<T: Target> {
+pub trait NativeComponent<T: Target> {
     type Props;
-    type State;
     fn create(&self, target: &T) -> T::Component;
     fn reconcile(&self,
                  context: &T::Context,
                  component: &mut T::Component,
                  props: &Self::Props,
-                 children: &Vec<VNode<T>>/*,
-                 state: &mut Self::State*/);
+                 children: &Vec<VNode<T>>);
 }
 
 pub fn render<T: Target>(target: &mut T, node: VNode<T>) {
     let (root, context) = target.get_root_and_context();
-    node.reconcile(context, root);
+    render_component(context, node, root);
+}
+
+pub fn render_component<T: Target>(context: &T::Context, node: VNode<T>, component: &mut T::Component) {
+    node.reconcile(context, component);
 }
